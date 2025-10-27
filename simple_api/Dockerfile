@@ -1,10 +1,23 @@
-FROM python:3.8-buster
-LABEL maintainer="Sebastien"
+# Remplace Buster par Bullseye (version encore maintenue)
+FROM python:3.8-bullseye
+
+LABEL maintainer="seb"
+
+# Copie des fichiers nécessaires
 COPY requirements.txt student_age.py /
-RUN sed -i 's|deb.debian.org|archive.debian.org|g' /etc/apt/sources.list \
- && sed -i '/security/d' /etc/apt/sources.list
-RUN apt update -y && apt install python-dev python3-dev libsasl2-dev python-dev libldap2-dev libssl-dev -y
-RUN pip3 install -r /requirements.txt
-VOLUME [ "/data" ]
+
+# Mise à jour et installation des dépendances
+RUN apt-get update -y && \
+    apt-get install -y --no-install-recommends \
+        python3-dev libsasl2-dev libldap2-dev libssl-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+# Installation des dépendances Python
+RUN pip3 install --no-cache-dir -r /requirements.txt
+
+# Volume et port
+VOLUME ["/data"]
 EXPOSE 5000
-CMD [ "python3", "./student_age.py" ]
+
+# Lancement de ton script
+CMD ["python3", "./student_age.py"]
