@@ -5,7 +5,9 @@ This repo is a simple application to list student with a webserver (PHP) and API
 
 
 ------------
+## Before
 
+Use Vagranfile and install_docker.sh to create a VM. Put these files out the root directory. And execute vagrant up --provision
 
 ## Objectives
 
